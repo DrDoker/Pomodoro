@@ -34,7 +34,7 @@ class MainViewController: UIViewController {
         button.setImage(image, for: .normal)
 
         button.tintColor = .black
-        button.addTarget(self, action: #selector(handleToggleBT), for: .touchUpInside)
+        button.addTarget(self, action: #selector(startStopButtonPressed), for: .touchUpInside)
         return button
     }()
 
@@ -68,19 +68,16 @@ class MainViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc func handleToggleBT(sender: UIButton) {
-
-        isStarted = !isStarted
-
+    @objc func startStopButtonPressed(sender: UIButton) {
         let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
         let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
         let stopImage = UIImage(systemName: "stop", withConfiguration: configSymbol)
 
+        isStarted = !isStarted
         if isStarted {
             startStopButton.setImage(stopImage, for: .normal)
         } else {
             startStopButton.setImage(palyImage, for: .normal)
         }
     }
-    
 }

@@ -68,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				C5CDC22E28B1868D005F0AFA /* App */,
+				C5CDC23628B27CB0005F0AFA /* View */,
 				C5CDC22D28B1867C005F0AFA /* Storyboards */,
 			);
 			path = Sources;
@@ -87,7 +88,6 @@
 			children = (
 				C5CDC21828B18391005F0AFA /* AppDelegate.swift */,
 				C5CDC21A28B18391005F0AFA /* SceneDelegate.swift */,
-				C5CDC23128B187C3005F0AFA /* MainViewController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -107,6 +107,14 @@
 				C5CDC22628B18393005F0AFA /* Info.plist */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		C5CDC23628B27CB0005F0AFA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C5CDC23128B187C3005F0AFA /* MainViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -9,6 +9,10 @@ import UIKit
 import SnapKit
 
 class MainViewController: UIViewController {
+    // MARK: - Logica
+
+    var isStarted = false
+
     // MARK: - Labels Outlets
 
     private lazy var timeLabel: UILabel = {
@@ -27,11 +31,10 @@ class MainViewController: UIViewController {
 
         let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
         let image = UIImage(systemName: "play", withConfiguration: configSymbol)
-
         button.setImage(image, for: .normal)
-        button.setImage(UIImage(systemName: "stop"), for: .disabled)
+
         button.tintColor = .black
-        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(handleToggleBT), for: .touchUpInside)
         return button
     }()
 
@@ -64,5 +67,20 @@ class MainViewController: UIViewController {
     }
 
     // MARK: - Actions
+
+    @objc func handleToggleBT(sender: UIButton) {
+
+        isStarted = !isStarted
+
+        let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
+        let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
+        let stopImage = UIImage(systemName: "stop", withConfiguration: configSymbol)
+
+        if isStarted {
+            startStopButton.setImage(stopImage, for: .normal)
+        } else {
+            startStopButton.setImage(palyImage, for: .normal)
+        }
+    }
     
 }

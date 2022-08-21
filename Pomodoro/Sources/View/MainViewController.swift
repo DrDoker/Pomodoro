@@ -11,16 +11,19 @@ import SnapKit
 class MainViewController: UIViewController {
     // MARK: - Propertis
 
+    let workTimeInSeconds = 25.0
+    let vacationTimeInSeconds = 10.0
+
     var isStarted = false
     var isWorkTime = true
     var timer = Timer()
-    var timeCounter = 0
+    var timeCounter = 25.0
 
     // MARK: - Labels Outlets
 
     private lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "00:00"
+        label.text = timeCounter.minuteSecondMS
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 45, weight: .thin)
         label.textColor = .black
@@ -80,7 +83,7 @@ class MainViewController: UIViewController {
         if isStarted {
             timer.invalidate()
             startStopButton.setImage(stopImage, for: .normal)
-            timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
         } else {
             timer.invalidate()
             startStopButton.setImage(palyImage, for: .normal)
@@ -91,41 +94,51 @@ class MainViewController: UIViewController {
         let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
         let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
 
-        timeCounter += 1
-        let time = scondsToMinutesSeconds(seconds: timeCounter)
-        let timeString =  makeTimeString(minutes: time.0, seconds: time.1)
+        timeCounter -= 0.001
+        let timeString = timeCounter.minuteSecondMS
         timeLabel.text = timeString
 
-        if timeCounter == 20 && isWorkTime {
+        print(timeString)
+
+        if timeCounter <= 0 && isWorkTime {
             isWorkTime = false
-            timeCounter = 0
+            timeCounter = vacationTimeInSeconds
             timeLabel.textColor = .red
             startStopButton.tintColor = .red
             timer.invalidate()
             isStarted = false
             startStopButton.setImage(palyImage, for: .normal)
-        } else if timeCounter == 10 && !isWorkTime {
+            timeLabel.text = timeCounter.minuteSecondMS
+        } else if timeCounter <= 0 && !isWorkTime {
             isWorkTime = true
-            timeCounter = 0
+            timeCounter = workTimeInSeconds
             timeLabel.textColor = .black
             startStopButton.tintColor = .black
             timer.invalidate()
             isStarted = false
             startStopButton.setImage(palyImage, for: .normal)
+            timeLabel.text = timeCounter.minuteSecondMS
         }
     }
+}
 
-    func scondsToMinutesSeconds(seconds: Int) -> (Int, Int) {
-        let minutes = (seconds % 3600) / 60
-        let seconds = (seconds % 3600) % 60
-        return (minutes, seconds)
+extension TimeInterval {
+    var hourMinuteSecondMS: String {
+        String(format:"%d:%02d:%02d.%02d", hour, minute, second, millisecond)
     }
-
-    func makeTimeString(minutes: Int, seconds: Int) -> String {
-        var timeString = ""
-        timeString += String(format: "%02d", minutes)
-        timeString += " : "
-        timeString += String(format: "%02d", seconds)
-        return timeString
+    var minuteSecondMS: String {
+        String(format:"%d:%02d.%02d", minute, second, millisecond)
+    }
+    var hour: Int {
+        Int((self/3600).truncatingRemainder(dividingBy: 3600))
+    }
+    var minute: Int {
+        Int((self/60).truncatingRemainder(dividingBy: 60))
+    }
+    var second: Int {
+        Int(truncatingRemainder(dividingBy: 60))
+    }
+    var millisecond: Int {
+        Int((self*100).truncatingRemainder(dividingBy: 100))
     }
 }

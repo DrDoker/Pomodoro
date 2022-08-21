@@ -11,13 +11,13 @@ import SnapKit
 class MainViewController: UIViewController {
     // MARK: - Propertis
 
-    let workTimeInSeconds = 25.0
-    let vacationTimeInSeconds = 10.0
-
     var isStarted = false
     var isWorkTime = true
-    var timer = Timer()
+    let workTimeInSeconds = 25.0
+    let vacationTimeInSeconds = 10.0
     var timeCounter = 25.0
+    var timer = Timer()
+
 
     // MARK: - Labels Outlets
 
@@ -26,7 +26,7 @@ class MainViewController: UIViewController {
         label.text = timeCounter.minuteSecondMS
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 45, weight: .thin)
-        label.textColor = .black
+        label.textColor = .systemGreen
         return label
     }()
 
@@ -39,7 +39,7 @@ class MainViewController: UIViewController {
         let image = UIImage(systemName: "play", withConfiguration: configSymbol)
         button.setImage(image, for: .normal)
 
-        button.tintColor = .black
+        button.tintColor = .systemGreen
         button.addTarget(self, action: #selector(startStopButtonPressed), for: .touchUpInside)
         return button
     }()
@@ -51,7 +51,7 @@ class MainViewController: UIViewController {
         setupHierarchy()
         setupLayout()
 
-        view.backgroundColor = .systemYellow
+        view.backgroundColor = .black
     }
 
     // MARK: - Setup
@@ -63,7 +63,8 @@ class MainViewController: UIViewController {
 
     private func setupLayout() {
         timeLabel.snp.makeConstraints { make in
-            make.center.equalTo(view)
+            make.centerY.equalTo(view)
+            make.left.equalTo(view).offset(117)
         }
 
         startStopButton.snp.makeConstraints { make in
@@ -98,8 +99,6 @@ class MainViewController: UIViewController {
         let timeString = timeCounter.minuteSecondMS
         timeLabel.text = timeString
 
-        print(timeString)
-
         if timeCounter <= 0 && isWorkTime {
             isWorkTime = false
             timeCounter = vacationTimeInSeconds
@@ -112,8 +111,8 @@ class MainViewController: UIViewController {
         } else if timeCounter <= 0 && !isWorkTime {
             isWorkTime = true
             timeCounter = workTimeInSeconds
-            timeLabel.textColor = .black
-            startStopButton.tintColor = .black
+            timeLabel.textColor = .systemRed
+            startStopButton.tintColor = .systemRed
             timer.invalidate()
             isStarted = false
             startStopButton.setImage(palyImage, for: .normal)
@@ -123,22 +122,22 @@ class MainViewController: UIViewController {
 }
 
 extension TimeInterval {
-    var hourMinuteSecondMS: String {
-        String(format:"%d:%02d:%02d.%02d", hour, minute, second, millisecond)
-    }
     var minuteSecondMS: String {
-        String(format:"%d:%02d.%02d", minute, second, millisecond)
+        String(format:"%02d:%02d.%02d", minute, second, millisecond)
+    }
+    var secondMS: String {
+        String(format:"%02d:%02d", second, millisecond)
     }
     var hour: Int {
-        Int((self/3600).truncatingRemainder(dividingBy: 3600))
+        Int((self / 3600).truncatingRemainder(dividingBy: 3600))
     }
     var minute: Int {
-        Int((self/60).truncatingRemainder(dividingBy: 60))
+        Int((self / 60).truncatingRemainder(dividingBy: 60))
     }
     var second: Int {
         Int(truncatingRemainder(dividingBy: 60))
     }
     var millisecond: Int {
-        Int((self*100).truncatingRemainder(dividingBy: 100))
+        Int((self * 100).truncatingRemainder(dividingBy: 100))
     }
 }

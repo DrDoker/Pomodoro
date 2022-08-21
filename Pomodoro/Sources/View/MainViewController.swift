@@ -13,9 +13,8 @@ class MainViewController: UIViewController {
 
     var isStarted = false
     var isWorkTime = true
-
     var timer = Timer()
-    var counter = 0
+    var timeCounter = 0
 
     // MARK: - Labels Outlets
 
@@ -75,35 +74,44 @@ class MainViewController: UIViewController {
     @objc func startStopButtonPressed(sender: UIButton) {
         let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
         let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
-        let stopImage = UIImage(systemName: "stop", withConfiguration: configSymbol)
+        let stopImage = UIImage(systemName: "pause", withConfiguration: configSymbol)
 
         isStarted = !isStarted
         if isStarted {
+            timer.invalidate()
             startStopButton.setImage(stopImage, for: .normal)
-            timer.invalidate()
-            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
         } else {
-            startStopButton.setImage(palyImage, for: .normal)
             timer.invalidate()
+            startStopButton.setImage(palyImage, for: .normal)
         }
     }
 
     @objc func timerAction(timer: Timer) {
-        counter += 1
-        let time = scondsToMinutesSeconds(seconds: counter)
+        let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
+        let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
+
+        timeCounter += 1
+        let time = scondsToMinutesSeconds(seconds: timeCounter)
         let timeString =  makeTimeString(minutes: time.0, seconds: time.1)
         timeLabel.text = timeString
 
-        if counter == 80 && isWorkTime {
+        if timeCounter == 20 && isWorkTime {
             isWorkTime = false
-            startStopButton.tintColor = .red
+            timeCounter = 0
             timeLabel.textColor = .red
-            counter = 0
-        } else if counter == 70 && !isWorkTime {
+            startStopButton.tintColor = .red
+            timer.invalidate()
+            isStarted = false
+            startStopButton.setImage(palyImage, for: .normal)
+        } else if timeCounter == 10 && !isWorkTime {
             isWorkTime = true
-            startStopButton.tintColor = .black
+            timeCounter = 0
             timeLabel.textColor = .black
-            counter = 0
+            startStopButton.tintColor = .black
+            timer.invalidate()
+            isStarted = false
+            startStopButton.setImage(palyImage, for: .normal)
         }
     }
 

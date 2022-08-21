@@ -44,6 +44,15 @@ class MainViewController: UIViewController {
         return button
     }()
 
+    // MARK: - View Outlets
+
+    private lazy var progressBarView: ProgressBar = {
+        let button = ProgressBar()
+
+        return button
+    }()
+
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -57,6 +66,7 @@ class MainViewController: UIViewController {
     // MARK: - Setup
 
     private func setupHierarchy() {
+        view.addSubview(progressBarView)
         view.addSubview(timeLabel)
         view.addSubview(startStopButton)
     }
@@ -70,6 +80,13 @@ class MainViewController: UIViewController {
         startStopButton.snp.makeConstraints { make in
             make.centerX.equalTo(view)
             make.centerY.equalTo(view).offset(70)
+        }
+
+        progressBarView.snp.makeConstraints { make in
+            make.centerX.equalTo(view)
+            make.centerY.equalTo(view).offset(11)
+            make.height.equalTo(300)
+            make.width.equalTo(300)
         }
     }
 

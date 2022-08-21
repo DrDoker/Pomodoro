@@ -102,8 +102,8 @@ class MainViewController: UIViewController {
         if timeCounter <= 0 && isWorkTime {
             isWorkTime = false
             timeCounter = vacationTimeInSeconds
-            timeLabel.textColor = .red
-            startStopButton.tintColor = .red
+            timeLabel.textColor = .systemRed
+            startStopButton.tintColor = .systemRed
             timer.invalidate()
             isStarted = false
             startStopButton.setImage(palyImage, for: .normal)
@@ -111,8 +111,8 @@ class MainViewController: UIViewController {
         } else if timeCounter <= 0 && !isWorkTime {
             isWorkTime = true
             timeCounter = workTimeInSeconds
-            timeLabel.textColor = .systemRed
-            startStopButton.tintColor = .systemRed
+            timeLabel.textColor = .systemGreen
+            startStopButton.tintColor = .systemGreen
             timer.invalidate()
             isStarted = false
             startStopButton.setImage(palyImage, for: .normal)

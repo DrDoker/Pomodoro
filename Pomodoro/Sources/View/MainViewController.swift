@@ -9,9 +9,13 @@ import UIKit
 import SnapKit
 
 class MainViewController: UIViewController {
-    // MARK: - Logica
+    // MARK: - Propertis
 
     var isStarted = false
+    var isWorkTime = true
+
+    var timer = Timer()
+    var counter = 0
 
     // MARK: - Labels Outlets
 
@@ -76,8 +80,44 @@ class MainViewController: UIViewController {
         isStarted = !isStarted
         if isStarted {
             startStopButton.setImage(stopImage, for: .normal)
+            timer.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
         } else {
             startStopButton.setImage(palyImage, for: .normal)
+            timer.invalidate()
         }
+    }
+
+    @objc func timerAction(timer: Timer) {
+        counter += 1
+        let time = scondsToMinutesSeconds(seconds: counter)
+        let timeString =  makeTimeString(minutes: time.0, seconds: time.1)
+        timeLabel.text = timeString
+
+        if counter == 80 && isWorkTime {
+            isWorkTime = false
+            startStopButton.tintColor = .red
+            timeLabel.textColor = .red
+            counter = 0
+        } else if counter == 70 && !isWorkTime {
+            isWorkTime = true
+            startStopButton.tintColor = .black
+            timeLabel.textColor = .black
+            counter = 0
+        }
+    }
+
+    func scondsToMinutesSeconds(seconds: Int) -> (Int, Int) {
+        let minutes = (seconds % 3600) / 60
+        let seconds = (seconds % 3600) % 60
+        return (minutes, seconds)
+    }
+
+    func makeTimeString(minutes: Int, seconds: Int) -> String {
+        var timeString = ""
+        timeString += String(format: "%02d", minutes)
+        timeString += " : "
+        timeString += String(format: "%02d", seconds)
+        return timeString
     }
 }

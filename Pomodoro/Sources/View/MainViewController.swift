@@ -13,8 +13,8 @@ class MainViewController: UIViewController {
 
     var isStarted = false
     var isWorkTime = true
-    let workTimeInSeconds = 25.0
-    let vacationTimeInSeconds = 15.0
+    let workTimeInSeconds = 10.0
+    let vacationTimeInSeconds = 7.0
     var timeCounter = 0.0
     var timer = Timer()
 
@@ -28,7 +28,7 @@ class MainViewController: UIViewController {
     private lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = workTimeInSeconds.minuteSecondMS
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = .systemFont(ofSize: 45, weight: .thin)
         label.textColor = .systemRed
         return label
@@ -76,8 +76,8 @@ class MainViewController: UIViewController {
 
     private func setupLayout() {
         timeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(view)
-            make.left.equalTo(view).offset(117)
+            make.center.equalTo(view)
+            make.width.equalTo(178)
         }
 
         startStopButton.snp.makeConstraints { make in
@@ -154,7 +154,7 @@ class MainViewController: UIViewController {
         let width = progressBarSize
         let height = progressBarSize
 
-        let lineWidth = 0.07 * min(width, height)
+        let lineWidth = 0.06 * min(width, height)
 
         let center = CGPoint(x: width / 2, y: height / 2)
         let radius = (min(width, height) - lineWidth) / 2
@@ -184,7 +184,7 @@ class MainViewController: UIViewController {
         let width = progressBarSize
         let height = progressBarSize
 
-        let lineWidth = 0.07 * min(width, height)
+        let lineWidth = 0.06 * min(width, height)
 
         let center = CGPoint(x: width / 2, y: height / 2)
         let radius = (min(width, height) - lineWidth) / 2

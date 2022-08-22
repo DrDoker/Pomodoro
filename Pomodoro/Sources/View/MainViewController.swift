@@ -14,8 +14,8 @@ class MainViewController: UIViewController {
     var isStarted = false
     var isWorkTime = true
     let workTimeInSeconds = 25.0
-    let vacationTimeInSeconds = 10.0
-    var timeCounter = 25.0
+    let vacationTimeInSeconds = 25.0
+    var timeCounter = 0.0
     var timer = Timer()
 
 
@@ -47,11 +47,10 @@ class MainViewController: UIViewController {
     // MARK: - View Outlets
 
     private lazy var progressBarView: ProgressBar = {
-        let button = ProgressBar()
+        let view = ProgressBar()
 
-        return button
+        return view
     }()
-
 
     // MARK: - Lifecycle
 
@@ -60,14 +59,15 @@ class MainViewController: UIViewController {
         setupHierarchy()
         setupLayout()
 
+        timeCounter = workTimeInSeconds
         view.backgroundColor = .black
     }
 
     // MARK: - Setup
 
     private func setupHierarchy() {
-        view.addSubview(progressBarView)
         view.addSubview(timeLabel)
+        view.addSubview(progressBarView)
         view.addSubview(startStopButton)
     }
 
@@ -113,8 +113,11 @@ class MainViewController: UIViewController {
         let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
 
         timeCounter -= 0.001
+
         let timeString = timeCounter.minuteSecondMS
         timeLabel.text = timeString
+
+       progressBarView.progress = timeCounter / workTimeInSeconds
 
         if timeCounter <= 0 && isWorkTime {
             isWorkTime = false
@@ -136,6 +139,7 @@ class MainViewController: UIViewController {
             timeLabel.text = timeCounter.minuteSecondMS
         }
     }
+
 }
 
 extension TimeInterval {

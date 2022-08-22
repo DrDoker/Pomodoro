@@ -11,8 +11,9 @@ import SnapKit
 class MainViewController: UIViewController {
     // MARK: - Propertis
 
-    var isStarted = false
+    var isStartButtonPressed = false
     var isWorkTime = true
+    var isStarted = false
     let workTimeInSeconds = 25.0
     let vacationTimeInSeconds = 10.0
     var timeCounter = 0.0
@@ -60,18 +61,19 @@ class MainViewController: UIViewController {
         setupHierarchy()
         setupLayout()
 
-        view.backgroundColor = .black
-        backgroundCircular()
-        animationCircular(startGradientColor: .red, endGradientColor: .orange)
         timeCounter = workTimeInSeconds
     }
 
     // MARK: - Setup
 
     private func setupHierarchy() {
+        view.backgroundColor = .black
         view.addSubview(progressBarView)
         view.addSubview(timeLabel)
         view.addSubview(startStopButton)
+
+        backgroundCircular()
+        animationCircular(startGradientColor: .red, endGradientColor: .orange)
     }
 
     private func setupLayout() {
@@ -100,11 +102,13 @@ class MainViewController: UIViewController {
         let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
         let stopImage = UIImage(systemName: "pause", withConfiguration: configSymbol)
 
-        isStarted = !isStarted
-        if isStarted {
+        isStartButtonPressed = !isStartButtonPressed
+        if isStartButtonPressed {
             timer.invalidate()
-            if timeCounter == vacationTimeInSeconds || timeCounter == workTimeInSeconds {
+
+            if !isStarted {
                 progressAnimation()
+                isStarted = true
             }
 
             shapeLayer.resumeAnimation()
@@ -128,6 +132,7 @@ class MainViewController: UIViewController {
 
         if timeCounter <= 0 && isWorkTime {
             timer.invalidate()
+            isStartButtonPressed = false
             isWorkTime = false
             isStarted = false
             timeCounter = vacationTimeInSeconds
@@ -138,6 +143,7 @@ class MainViewController: UIViewController {
             startStopButton.setImage(palyImage, for: .normal)
         } else if timeCounter <= 0 && !isWorkTime {
             timer.invalidate()
+            isStartButtonPressed = false
             isWorkTime = true
             isStarted = false
             timeCounter = workTimeInSeconds
@@ -148,6 +154,8 @@ class MainViewController: UIViewController {
             startStopButton.setImage(palyImage, for: .normal)
         }
     }
+
+    // MARK: - Progres Bar
 
     func animationCircular(startGradientColor: UIColor, endGradientColor: UIColor) {
         let width = progressBarSize
@@ -209,52 +217,5 @@ class MainViewController: UIViewController {
         circularProgressAnimation.fillMode = CAMediaTimingFillMode.forwards
         circularProgressAnimation.isRemovedOnCompletion = true
         shapeLayer.add(circularProgressAnimation, forKey: "progressAnimation")
-    }
-
-}
-
-extension TimeInterval {
-    var minuteSecondMS: String {
-        String(format:"%02d:%02d.%02d", minute, second, millisecond)
-    }
-    var secondMS: String {
-        String(format:"%02d:%02d", second, millisecond)
-    }
-    var hour: Int {
-        Int((self / 3600).truncatingRemainder(dividingBy: 3600))
-    }
-    var minute: Int {
-        Int((self / 60).truncatingRemainder(dividingBy: 60))
-    }
-    var second: Int {
-        Int(truncatingRemainder(dividingBy: 60))
-    }
-    var millisecond: Int {
-        Int((self * 100).truncatingRemainder(dividingBy: 100))
-    }
-}
-
-extension CALayer {
-    func pauseAnimation() {
-        if !isPaused() {
-            let pausedTime = convertTime(CACurrentMediaTime(), from: nil)
-            speed = 0.0
-            timeOffset = pausedTime
-        }
-    }
-
-    func resumeAnimation() {
-        if isPaused() {
-            let pausedTime = timeOffset
-            speed = 1.0
-            timeOffset = 0.0
-            beginTime = 0.0
-            let timeSincePause = convertTime(CACurrentMediaTime(), from: nil) - pausedTime
-            beginTime = timeSincePause
-        }
-    }
-
-    func isPaused() -> Bool {
-        return speed == 0
     }
 }

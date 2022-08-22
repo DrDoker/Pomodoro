@@ -19,6 +19,8 @@ class MainViewController: UIViewController {
     var timer = Timer()
 
 
+    let shapeLayer = CAShapeLayer()
+
     // MARK: - Labels Outlets
 
     private lazy var timeLabel: UILabel = {
@@ -46,13 +48,17 @@ class MainViewController: UIViewController {
 
     // MARK: - View Outlets
 
-    private lazy var progressBarView: ProgressBar = {
-        let view = ProgressBar()
-
+    private lazy var progressBarView: UIView = {
+        let view = UIView()
         return view
     }()
 
     // MARK: - Lifecycle
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        animationCircular()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,13 +67,15 @@ class MainViewController: UIViewController {
 
         timeCounter = workTimeInSeconds
         view.backgroundColor = .black
+
+
     }
 
     // MARK: - Setup
 
     private func setupHierarchy() {
-        view.addSubview(timeLabel)
         view.addSubview(progressBarView)
+        view.addSubview(timeLabel)
         view.addSubview(startStopButton)
     }
 
@@ -100,6 +108,7 @@ class MainViewController: UIViewController {
         isStarted = !isStarted
         if isStarted {
             timer.invalidate()
+            progressAnimation()
             startStopButton.setImage(stopImage, for: .normal)
             timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
         } else {
@@ -112,12 +121,11 @@ class MainViewController: UIViewController {
         let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
         let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
 
-        timeCounter -= 0.001
+        timeCounter -= timer.timeInterval
 
         let timeString = timeCounter.minuteSecondMS
         timeLabel.text = timeString
 
-       progressBarView.progress = timeCounter / workTimeInSeconds
 
         if timeCounter <= 0 && isWorkTime {
             isWorkTime = false
@@ -138,6 +146,44 @@ class MainViewController: UIViewController {
             startStopButton.setImage(palyImage, for: .normal)
             timeLabel.text = timeCounter.minuteSecondMS
         }
+    }
+
+    func animationCircular() {
+        let width = progressBarView.frame.width
+        let height = progressBarView.frame.width
+
+        print(width, height)
+
+        let lineWidth = 0.07 * min(width, height)
+
+        let center = CGPoint(x: width / 2, y: height / 2)
+        let radius = (min(width, height) - lineWidth) / 2
+
+        let startAngle = -CGFloat.pi / 2
+        let endAngle = startAngle + 2 * CGFloat.pi
+
+        let circularPath = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+
+        shapeLayer.path = circularPath.cgPath
+        shapeLayer.lineWidth = lineWidth
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeColor = UIColor.systemGreen.cgColor
+        shapeLayer.strokeEnd = 1
+        shapeLayer.lineCap = CAShapeLayerLineCap.round
+
+        progressBarView.layer.addSublayer(shapeLayer)
+    }
+
+    func progressAnimation() {
+            // created circularProgressAnimation with keyPath
+            let circularProgressAnimation = CABasicAnimation(keyPath: "strokeEnd")
+            // set the end time
+            circularProgressAnimation.duration = CFTimeInterval(timeCounter)
+        circularProgressAnimation.
+            circularProgressAnimation.toValue = 0
+            circularProgressAnimation.fillMode = CAMediaTimingFillMode.forwards
+            circularProgressAnimation.isRemovedOnCompletion = true
+            shapeLayer.add(circularProgressAnimation, forKey: "progressAnimation")
     }
 
 }

@@ -13,8 +13,8 @@ class MainViewController: UIViewController {
 
     var isStarted = false
     var isWorkTime = true
-    let workTimeInSeconds = 10.0
-    let vacationTimeInSeconds = 7.0
+    let workTimeInSeconds = 25.0
+    let vacationTimeInSeconds = 10.0
     var timeCounter = 0.0
     var timer = Timer()
 
@@ -126,27 +126,26 @@ class MainViewController: UIViewController {
         let timeString = timeCounter.minuteSecondMS
         timeLabel.text = timeString
 
-
         if timeCounter <= 0 && isWorkTime {
+            timer.invalidate()
             isWorkTime = false
+            isStarted = false
             timeCounter = vacationTimeInSeconds
+            timeLabel.text = timeCounter.minuteSecondMS
             timeLabel.textColor = .systemGreen
             startStopButton.tintColor = .systemGreen
             animationCircular(startGradientColor: .green, endGradientColor: .tintColor)
-            timer.invalidate()
-            isStarted = false
             startStopButton.setImage(palyImage, for: .normal)
-            timeLabel.text = timeCounter.minuteSecondMS
         } else if timeCounter <= 0 && !isWorkTime {
+            timer.invalidate()
             isWorkTime = true
+            isStarted = false
             timeCounter = workTimeInSeconds
+            timeLabel.text = timeCounter.minuteSecondMS
             timeLabel.textColor = .systemRed
             startStopButton.tintColor = .systemRed
             animationCircular(startGradientColor: .red, endGradientColor: .orange)
-            timer.invalidate()
-            isStarted = false
             startStopButton.setImage(palyImage, for: .normal)
-            timeLabel.text = timeCounter.minuteSecondMS
         }
     }
 
@@ -154,7 +153,7 @@ class MainViewController: UIViewController {
         let width = progressBarSize
         let height = progressBarSize
 
-        let lineWidth = 0.06 * min(width, height)
+        let lineWidth = 0.05 * min(width, height)
 
         let center = CGPoint(x: width / 2, y: height / 2)
         let radius = (min(width, height) - lineWidth) / 2
@@ -184,7 +183,7 @@ class MainViewController: UIViewController {
         let width = progressBarSize
         let height = progressBarSize
 
-        let lineWidth = 0.06 * min(width, height)
+        let lineWidth = 0.05 * min(width, height)
 
         let center = CGPoint(x: width / 2, y: height / 2)
         let radius = (min(width, height) - lineWidth) / 2

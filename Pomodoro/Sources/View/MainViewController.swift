@@ -24,6 +24,8 @@ class MainViewController: UIViewController {
     let shapeLayer = CAShapeLayer()
     let gradientLayer = CAGradientLayer()
 
+    let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
+
     // MARK: - Labels Outlets
 
     private lazy var timeLabel: UILabel = {
@@ -39,7 +41,6 @@ class MainViewController: UIViewController {
 
     private lazy var startStopButton: UIButton = {
         let button = UIButton(type: .system)
-        let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
         let image = UIImage(systemName: "play", withConfiguration: configSymbol)
         button.setImage(image, for: .normal)
         button.tintColor = .systemRed
@@ -98,8 +99,7 @@ class MainViewController: UIViewController {
     // MARK: - Actions
 
     @objc func startStopButtonPressed(sender: UIButton) {
-        let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
-        let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
+        let playImage = UIImage(systemName: "play", withConfiguration: configSymbol)
         let stopImage = UIImage(systemName: "pause", withConfiguration: configSymbol)
 
         isStartButtonPressed = !isStartButtonPressed
@@ -117,13 +117,12 @@ class MainViewController: UIViewController {
         } else {
             timer.invalidate()
             shapeLayer.pauseAnimation()
-            startStopButton.setImage(palyImage, for: .normal)
+            startStopButton.setImage(playImage, for: .normal)
         }
     }
 
     @objc func timerAction(timer: Timer) {
-        let configSymbol = UIImage.SymbolConfiguration(pointSize: 50, weight: .thin, scale: .default)
-        let palyImage = UIImage(systemName: "play", withConfiguration: configSymbol)
+        let playImage = UIImage(systemName: "play", withConfiguration: configSymbol)
 
         timeCounter -= timer.timeInterval
 
@@ -140,7 +139,7 @@ class MainViewController: UIViewController {
             timeLabel.textColor = .systemGreen
             startStopButton.tintColor = .systemGreen
             animationCircular(startGradientColor: .green, endGradientColor: .tintColor)
-            startStopButton.setImage(palyImage, for: .normal)
+            startStopButton.setImage(playImage, for: .normal)
         } else if timeCounter <= 0 && !isWorkTime {
             timer.invalidate()
             isStartButtonPressed = false
@@ -151,7 +150,7 @@ class MainViewController: UIViewController {
             timeLabel.textColor = .systemRed
             startStopButton.tintColor = .systemRed
             animationCircular(startGradientColor: .red, endGradientColor: .orange)
-            startStopButton.setImage(palyImage, for: .normal)
+            startStopButton.setImage(playImage, for: .normal)
         }
     }
 

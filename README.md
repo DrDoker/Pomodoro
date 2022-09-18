@@ -1,5 +1,9 @@
 # HW12-iOS7-Pomodoro
-Домашнее задание 12. Верстка простого приложения Помидор
+This is an example of a timer with time and color switching.
+
+When the work phase ends (for example 25 seconds), the rest phase begins , the color changes to green and the time changes to 10 seconds. The timer can be stopped and continued.
+
+I used UIKit and SnapKit.
 
 <img src="https://user-images.githubusercontent.com/22889898/186125897-580254e8-e6c0-4cfb-833d-fc789095a058.png" width="45%"></img> 
 <img src="https://user-images.githubusercontent.com/22889898/186125902-3853ad4a-6bdc-4ea9-91f7-001f49e0492f.png" width="45%"></img> 

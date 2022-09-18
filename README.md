@@ -1,4 +1,4 @@
-# HW12-iOS7-Pomodoro
+# Pomodoro
 This is an example of a timer with time and color switching.
 
 When the work phase ends (for example 25 seconds), the rest phase begins , the color changes to green and the time changes to 10 seconds. The timer can be stopped and continued.
